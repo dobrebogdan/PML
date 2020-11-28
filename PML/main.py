@@ -6,15 +6,24 @@ from nltk.tokenize import word_tokenize
 from nltk.stem.snowball import GermanStemmer
 from german_lemmatizer import lemmatize
 import spacy
+
+
 nlp = spacy.load('de_core_news_sm')
+
+
 
 freq_words = ['ich', 'der', 'de', 'isch', 'und', 'i', 'sein', 'ned', 'sich', 'e', 'u', 'nid']
 
+words_cnt = {}
+
 def text_to_coords(curr_str):
+    emojis_cont = 0.0
+    for i in range(0, len(curr_str)):
+        if (not curr_str[i] == " ") and (not curr_str[i].isalpha()) \
+                and (not curr_str[i] in [",", ".", ";", "!", "?", ":", "(", ")", "[", "]", "{", "}","-","+"]):
+            emojis_cont += 1.0
     for i in range(0, len(curr_str)):
         if (not curr_str[i] == " ") and (not curr_str[i].isalpha()):
-            #words_cnt[curr_str[i]] = words_cnt.get(curr_str[i], 0) + 1
-            #words_corelation[curr_str[i]] = add_tuples(words_corelation.get(curr_str[i], (0.0, 0.0)), pair[0])
             curr_str = curr_str.replace(curr_str[i], " ")
     curr_str = curr_str.lower()
     tokens = nlp.tokenizer(curr_str)
@@ -24,16 +33,18 @@ def text_to_coords(curr_str):
         token = str(token.lemma_)
         if token == "" or (not token[0].isalpha()):
             continue
+        words_cnt[token] = words_cnt.get(token, 0) + 1
         curr_words_cnt[token] = curr_words_cnt.get(token, 0.0) + 1.0
     curr_coords = []
-    sum = 0
+    sum = 0.0
     for i in range(0, len(freq_words)):
-        t = curr_words_cnt.get(freq_words[i], 0)
+        t = curr_words_cnt.get(freq_words[i], 0.0)
         sum = sum + t
         curr_coords.append(t)
-
-    if sum ==0:
-        sum = 1
+    #curr_coords.append(emojis_cont)
+    #sum = sum + emojis_cont
+    if sum == 0.0:
+        sum = 1.0
     for i in range(0, len(curr_coords)):
         curr_coords[i] /= sum
     return curr_coords
@@ -53,7 +64,7 @@ def useful_data(coords):
 # Press the green button in the gutter to run the script.
 train_data = []
 train_labels = []
-train_data_dict = {}
+train_labels_cnt = {}
 with open("training.txt") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
     for row in csv_reader:
@@ -61,10 +72,17 @@ with open("training.txt") as csv_file:
         row[1] = float(row[1])
         row[2] = float(row[2])
         train_labels.append(str(row[1]) + "," + str(row[2]))
+        #train_labels_cnt[str(row[1]) + "," + str(row[2])] = train_labels_cnt.get(str(row[1]) + "," + str(row[2]),0) +1
 
-        train_data_dict[(row[1], row[2])] = train_data_dict.get((row[1], row[2]), "") + " " + row[3]
+words_cnt_lst = []
+for item in words_cnt.items():
+    words_cnt_lst.append((item[1], item[0]))
 
-
+words_cnt_lst = sorted(words_cnt_lst, reverse=True)
+with open("freq_words.txt", "w") as f:
+    for pair in words_cnt_lst:
+        f.write(str((pair[0], str(nlp.tokenizer(pair[1])[0].lemma_))))
+print(len(train_labels))
 print("LMAOOOO")
 validation_data = []
 validation_labels = []
@@ -75,17 +93,7 @@ with open("validation.txt") as csv_file:
         validation_labels.append(str(row[1]) + "," + str(row[2]))
 
 
-train_data = train_data
-train_labels = train_labels
-
-validation_data = validation_data
-
-print(validation_data)
-validation_labels = validation_labels
-
-
 
 knn_classifier = Knn_classifier(train_data, train_labels, validation_data, validation_labels)
 knn_classifier.classify_tweets()
 
-# sunt mai multe tweeturi de la aceleasi persoane. Cate? Este un fenomen raspandit?

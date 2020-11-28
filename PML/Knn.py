@@ -41,7 +41,7 @@ class Knn_classifier:
 
     def classify_tweets(self):
         # write your code here
-        clf = svm.SVC()
+        clf = svm.SVC(kernel='rbf')
         clf.fit(self.train_data, self.train_labels)
         l = len(self.validation_data)
         self.predictions = clf.predict(self.validation_data)
@@ -59,7 +59,10 @@ class Knn_classifier:
         for i in range(0, len(self.predictions)):
             (x1, y1) = self.get_touple(self.predictions[i])
             (x2, y2) = self.get_touple(self.validation_labels[i])
-            error += math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
+            curr_error = math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
+            if curr_error < 0.000001:
+                print("#####")
+            error += curr_error
         error = error / len(self.predictions)
         print("ERROR IS")
         print(error)
