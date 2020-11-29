@@ -12,8 +12,25 @@ nlp = spacy.load('de_core_news_sm')
 
 
 
-freq_words = ['ich', 'der', 'de', 'isch', 'und', 'i', 'sein', 'ned', 'sich', 'e', 'u', 'nid']
-
+freq_words = ['ich', 'der', 'und', 'isch', 'de', 'sich', 'so', 'aber', 'au', 'i', 'mein', 'du',
+              'wo', 'was', 'mit', 'ja', 'e', 'en', 'uf', 'no', 'im','wie','wenn','am','oder,',
+              'bi','nid', 'd', 'ha', 'für', 'het', 'scho', 'ned', 'vo', 's', 'in', 'denn', 'z', 'mer',
+              'oj', 'nöd', 'bisch', 'han', 'hesch', 'machen', 'nur', 'da', 'mal', 'si', 'eifach', 'immer',
+              'meinen', 'zum', 'u', 'gsi', 'dr', 'werden', 'grad', 'a', 'dass',
+              'als','mi', 'nei', 'di', 'wer', 'guet', 'ein', 'kei', 'jo', 'zu','jetzt', 'us', 'hani',
+              'haha', 'jodel', 'ah', 'mini', 'gut', 'me', 'chli', 'all', 'wollen', 'go', 'also', 'viel',
+              'meh', 'hend', 'weiss', 'm', 'mol', 'ganz', 'vom', 'esch', 'min',
+              'vor', 'chasch', 'ds', 'cha', 'hüt', 'wär', 'jed', 'wieso', 'w', 'bim', 'danke', 'nüt',
+              'gha', 'gern', 'sichern', 'eh', 'wieder', 'gleich', 'nach', 'bis', 'nit', 'nie', 'lüt',
+              'do', 'nicht', 'haben', 'gmacht', 'dä', 'an', 'voll', 'ond', 'o', 'öpper', 'git', 'alli',
+              'mega', 'sehr', 'genau', 'alt', 'über', 'tag', 'ig', 'dini', 'chan', 'gseh', 'schaffen',
+              'glaub', 'em', 'kennen', 'mein', 'lieben', 'ab', 'um', 'gits', 'cho',
+              'schön''lang', 'hed', 'richtig', 'können', 'aso', 'frau', 'jahr', 'ide', 'gad', 'all', 'paar',
+              'mis', 'denken', 'kein', 'ou', 'ander', 'sorry', 'halt', 'ferie', 'weg', 'abr', 'ni', 'wenns',
+              'oh', 'luege', 'leider', 'is', 'öppis', 'moment', 'hei', 'mau', 'gar', 'muesch', 'wuche',
+              'selber', 'bini', 'fraue', 'bitte', 'ohni', 'gueti', 'muess', 'morn', 'ebe', 'würd', 'mim',
+              'hett', 'det', 'problem', 'hets', 'na', 'sit', 'öper', 'ech', 'super', 'finden', 'ob', 'ih',
+              'man', 'ä', 'ke', 'geil', 'gaht']
 words_cnt = {}
 
 def text_to_coords(curr_str):
@@ -86,14 +103,16 @@ print(len(train_labels))
 print("LMAOOOO")
 validation_data = []
 validation_labels = []
-with open("validation.txt") as csv_file:
+validation_ids = []
+with open("test.txt") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
     for row in csv_reader:
-        validation_data.append(text_to_coords(row[3]))
-        validation_labels.append(str(row[1]) + "," + str(row[2]))
+        validation_ids.append(row[0])
+        validation_data.append(text_to_coords(row[1]))
+        #validation_labels.append(str(row[1]) + "," + str(row[2]))
 
 
 
-knn_classifier = Knn_classifier(train_data, train_labels, validation_data, validation_labels)
+knn_classifier = Knn_classifier(train_data, train_labels, validation_ids, validation_data, validation_labels)
 knn_classifier.classify_tweets()
 

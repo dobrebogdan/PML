@@ -8,9 +8,10 @@ stemmer = Cistem()
 
 class Knn_classifier:
 
-    def __init__(self, train_data, train_labels, validation_data, validation_labels):
+    def __init__(self, train_data, train_labels, validation_ids, validation_data, validation_labels):
         self.train_data = train_data
         self.train_labels = train_labels
+        self.validation_ids = validation_ids
         self.validation_data = validation_data
         self.validation_labels = validation_labels
 
@@ -45,10 +46,16 @@ class Knn_classifier:
         clf.fit(self.train_data, self.train_labels)
         l = len(self.validation_data)
         self.predictions = clf.predict(self.validation_data)
-        with open("output.txt", "w") as f:
-            f.write(str(self.predictions))
+        with open("output.txt", "w+") as f:
+            l = len(self.predictions)
+
+            for i in range(0,l):
+                f.write(self.validation_ids[i])
+                f.write(", ")
+                f.write(self.predictions[i])
+                f.write("\n");
         self.predictions = self.predictions
-        self.print_error()
+        # self.print_error()
 
     def get_touple(self, s):
         s = s.split(",")
