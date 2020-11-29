@@ -7,6 +7,9 @@ from nltk.stem.snowball import GermanStemmer
 from german_lemmatizer import lemmatize
 import spacy
 
+mode = "dev"
+# dev or test
+
 
 nlp = spacy.load('de_core_news_sm')
 
@@ -30,15 +33,16 @@ freq_words = ['ich', 'der', 'und', 'isch', 'de', 'sich', 'so', 'aber', 'au', 'i'
               'oh', 'luege', 'leider', 'is', 'öppis', 'moment', 'hei', 'mau', 'gar', 'muesch', 'wuche',
               'selber', 'bini', 'fraue', 'bitte', 'ohni', 'gueti', 'muess', 'morn', 'ebe', 'würd', 'mim',
               'hett', 'det', 'problem', 'hets', 'na', 'sit', 'öper', 'ech', 'super', 'finden', 'ob', 'ih',
-              'man', 'ä', 'ke', 'geil', 'gaht']
+              'man', 'ä', 'ke', 'geil', 'gaht', 'ish', 'eu', 'din', 'ischs', 'aus', 'gseit', 'hät', 'guete', 'worde', 'be', 'ne', 'weisch']
+
 words_cnt = {}
 
 def text_to_coords(curr_str):
-    emojis_cont = 0.0
+    emojis_count = 0.0
     for i in range(0, len(curr_str)):
         if (not curr_str[i] == " ") and (not curr_str[i].isalpha()) \
                 and (not curr_str[i] in [",", ".", ";", "!", "?", ":", "(", ")", "[", "]", "{", "}","-","+"]):
-            emojis_cont += 1.0
+            emojis_count += 1.0
     for i in range(0, len(curr_str)):
         if (not curr_str[i] == " ") and (not curr_str[i].isalpha()):
             curr_str = curr_str.replace(curr_str[i], " ")
@@ -98,18 +102,27 @@ for item in words_cnt.items():
 words_cnt_lst = sorted(words_cnt_lst, reverse=True)
 with open("freq_words.txt", "w") as f:
     for pair in words_cnt_lst:
-        f.write(str((pair[0], str(nlp.tokenizer(pair[1])[0].lemma_))))
+        f.write("'" + str(nlp.tokenizer(pair[1])[0].lemma_) + "', ")
 print(len(train_labels))
 print("LMAOOOO")
 validation_data = []
 validation_labels = []
 validation_ids = []
-with open("test.txt") as csv_file:
+
+validation_file = "test.txt"
+if mode == "dev":
+    validation_file = "validation.txt"
+
+
+with open(validation_file) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
     for row in csv_reader:
         validation_ids.append(row[0])
-        validation_data.append(text_to_coords(row[1]))
-        #validation_labels.append(str(row[1]) + "," + str(row[2]))
+        if mode == "test":
+            validation_data.append(text_to_coords(row[1]))
+        else:
+            validation_labels.append(str(row[1]) + "," + str(row[2]))
+            validation_data.append(text_to_coords(row[3]))
 
 
 

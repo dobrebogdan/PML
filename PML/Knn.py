@@ -6,6 +6,9 @@ from sklearn import svm
 nlp = spacy.load('de_core_news_sm')
 stemmer = Cistem()
 
+mode = "dev"
+# dev or test
+
 class Knn_classifier:
 
     def __init__(self, train_data, train_labels, validation_ids, validation_data, validation_labels):
@@ -53,9 +56,10 @@ class Knn_classifier:
                 f.write(self.validation_ids[i])
                 f.write(", ")
                 f.write(self.predictions[i])
-                f.write("\n");
+                f.write("\n")
         self.predictions = self.predictions
-        # self.print_error()
+        if mode == "dev":
+            self.print_error()
 
     def get_touple(self, s):
         s = s.split(",")
