@@ -9,7 +9,7 @@ stemmer = Cistem()
 mode = "test"
 # dev or test
 
-class Knn_classifier:
+class SVM_classifier:
 
     def __init__(self, train_data, train_labels, validation_ids, validation_data, validation_labels):
         self.train_data = train_data
@@ -17,30 +17,6 @@ class Knn_classifier:
         self.validation_ids = validation_ids
         self.validation_data = validation_data
         self.validation_labels = validation_labels
-
-    # a. Write the classify_image(self, test_image, num_neighbors=3, metric='l2') function in order to classify 'test_image'
-    # example using the k-NN method with 'num_neighbors' neighbors and 'metric' distance.
-
-    def compute_distance(self, tweet1, tweet2):
-        dist = 0.0
-        l = len(tweet1)
-        for i in range(0, l):
-            dist = dist + (tweet1[i] - tweet2[i]) * (tweet1[i] - tweet2[i])
-        return math.sqrt(dist)
-
-    def classify_tweet(self, tweet):
-        min_dist = 1000000000.0
-        long = 52.0
-        lat = 10
-        l = len(self.train_data)
-        for i in range(0,l):
-            train_tweet = self.train_data[i]
-            curr_disr = self.compute_distance(tweet, train_tweet)
-            if curr_disr < min_dist:
-                min_dist = curr_disr
-                (long, lat) = self.train_labels[i]
-
-        return str((long, lat))
 
 
     def classify_tweets(self):

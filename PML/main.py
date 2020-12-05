@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
-from Knn import Knn_classifier
+from SVM_classifier import SVM_classifier
 from nltk.tokenize import word_tokenize
 from nltk.stem.snowball import GermanStemmer
 from german_lemmatizer import lemmatize
@@ -124,7 +124,9 @@ with open(validation_file) as csv_file:
             validation_labels.append(str(row[1]) + "," + str(row[2]))
             validation_data.append(text_to_coords(row[3]))
 
-knn_classifier = Knn_classifier(train_data, train_labels, validation_ids, validation_data, validation_labels)
+svm_classifier = SVM_classifier(train_data, train_labels, validation_ids, validation_data, validation_labels)
 
 # C 1000 gamma 1, error 1.094
-knn_classifier.classify_tweets()
+svm_classifier.classify_tweets()
+
+# TODO: implement neural network classifier and use it
