@@ -7,7 +7,7 @@ from torch.utils.data import Dataset, DataLoader
 
 # x_data este bag of words, y_data este indicele tagului si tags sunt numele tagurilor
 
-def train(x_data, y_data, tags):
+def train_NN(x_data, y_data):
     class SentenceDataset(Dataset):
         def __init__(self):
             self.data_size = len(x_data)
@@ -22,7 +22,7 @@ def train(x_data, y_data, tags):
 
     input_layer_size = len(x_data[0])
     hidden_layer_size = 30
-    output_layer_size = len(tags)
+    output_layer_size = len(y_data)
     learning_rate = 0.1
     epochs_number = 1000
     batch_size = 10
@@ -40,12 +40,13 @@ def train(x_data, y_data, tags):
             labels = labels.long()
 
             output_labels = model(sentences)
+
             loss = loss_criterion(output_labels, labels)
             loss.backward()
             adam_optimizer.step()
             adam_optimizer.zero_grad()
 
-        if (epoch + 1) >= 900:
+        if (epoch + 1) % 100 == 0:
             print(f' loss for epoch {epoch + 1} is: {loss:.8f}')
 
     data = {

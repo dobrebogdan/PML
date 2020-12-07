@@ -88,15 +88,24 @@ def useful_data(coords):
 train_data = []
 train_labels = []
 
+# bidirectional dictionary
+labels_dict = {}
 
+curr_id = 0
 with open("training.txt") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
     for row in csv_reader:
         train_data.append(text_to_coords((row[3])))
         row[1] = float(row[1])
         row[2] = float(row[2])
-        train_labels.append(np.float(row[0]))
-        #train_labels.append(str(row[1]) + "," + str(row[2]))
+        raw_label = str(row[1]) + "," + str(row[2])
+        if raw_label in labels_dict.keys():
+            train_labels.append(labels_dict[raw_label])
+        else:
+            labels_dict[raw_label] = curr_id
+            labels_dict[curr_id] = raw_label
+            train_labels.append(curr_id)
+            curr_id += 1
 
 train_data = np.array(train_data)
 train_labels = np.array(train_labels)
@@ -110,7 +119,7 @@ with open("freq_words.txt", "w") as f:
         f.write("'" + str(nlp.tokenizer(pair[1])[0].lemma_) + "', ")
 
 
-#train.train_NN(train_data, train_labels)
+train.train_NN(train_data, train_labels)
 
 
 validation_data = []
