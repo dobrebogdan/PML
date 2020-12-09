@@ -24,7 +24,7 @@ def train_NN(x_data, y_data):
     hidden_layer_size = 30
     output_layer_size = len(y_data)
     learning_rate = 0.1
-    epochs_number = 1000
+    epochs_number = 100
     batch_size = 10
 
     dataset = SentenceDataset()
@@ -45,7 +45,7 @@ def train_NN(x_data, y_data):
             loss.backward()
             adam_optimizer.step()
             adam_optimizer.zero_grad()
-
+        print(epoch)
         if (epoch + 1) % 100 == 0:
             print(f' loss for epoch {epoch + 1} is: {loss:.8f}')
 

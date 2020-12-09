@@ -8,7 +8,7 @@ from german_lemmatizer import lemmatize
 import spacy
 import train
 
-mode = "test"
+mode = "dev"
 # dev or test
 
 
@@ -35,7 +35,6 @@ freq_words = ['ich', 'der', 'und', 'isch', 'de', 'sich', 'so', 'aber', 'au', 'i'
               'selber', 'bini', 'fraue', 'bitte', 'ohni', 'gueti', 'muess', 'morn', 'ebe', 'würd', 'mim',
               'hett', 'det', 'problem', 'hets', 'na', 'sit', 'öper', 'ech', 'super', 'finden', 'ob', 'ih',
               'man', 'ä', 'ke', 'geil', 'gaht', 'ish', 'eu', 'din', 'ischs', 'aus', 'gseit', 'hät', 'guete', 'worde', 'be', 'ne', 'weisch']
-
 words_cnt = {}
 
 def text_to_coords(curr_str):

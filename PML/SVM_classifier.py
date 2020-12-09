@@ -6,7 +6,7 @@ from sklearn import svm
 nlp = spacy.load('de_core_news_sm')
 stemmer = Cistem()
 
-mode = "test"
+mode = "dev"
 # dev or test
 
 class SVM_classifier:
