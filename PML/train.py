@@ -24,7 +24,7 @@ def train_NN(x_data, y_data):
     hidden_layer_size = 30
     output_layer_size = len(y_data)
     learning_rate = 0.1
-    epochs_number = 100
+    epochs_number = 1000
     batch_size = 10
 
     dataset = SentenceDataset()

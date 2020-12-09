@@ -36,7 +36,7 @@ class NN_classifier:
 
         l = len(self.validation_data)
         self.predictions = [""] * l
-        for i in range(0,l):
+        for i in range(0, l):
             curr_data = self.validation_data[i]
             curr_data = curr_data.reshape(1, curr_data.shape[0])
             curr_data = torch.from_numpy(curr_data)
@@ -46,8 +46,7 @@ class NN_classifier:
             self.predictions[i] = self.train_labels[tag]
             probs = torch.softmax(output, dim=1)
             prob = probs[0][predicted.item()]
-            print("#")
-            print(prob)
+
             # maybe use prob for another idea
 
         with open("output.txt", "w+") as f:

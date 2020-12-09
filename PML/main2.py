@@ -20,7 +20,8 @@ freq_words = ['ich', 'der', 'und', 'isch', 'de', 'sich', 'so', 'aber', 'au', 'i'
               'bi','nid', 'd', 'ha', 'für', 'het', 'scho', 'ned', 'vo', 's', 'in', 'denn', 'z', 'mer',
               'oj', 'nöd', 'bisch', 'han', 'hesch', 'machen', 'nur', 'da', 'mal', 'si', 'eifach', 'immer',
               'meinen', 'zum', 'u', 'gsi', 'dr', 'werden', 'grad', 'a', 'dass']
-""",
+"""
+
               'als','mi', 'nei', 'di', 'wer', 'guet', 'ein', 'kei', 'jo', 'zu','jetzt', 'us', 'hani',
               'haha', 'jodel', 'ah', 'mini', 'gut', 'me', 'chli', 'all', 'wollen', 'go', 'also', 'viel',
               'meh', 'hend', 'weiss', 'm', 'mol', 'ganz', 'vom', 'esch', 'min',
@@ -121,7 +122,7 @@ with open("freq_words.txt", "w") as f:
         f.write("'" + str(nlp.tokenizer(pair[1])[0].lemma_) + "', ")
 
 # TRAINING
-# train.train_NN(train_data, train_labels)
+train.train_NN(train_data, train_labels)
 
 
 validation_data = []
