@@ -45,7 +45,7 @@ def text_to_coords(curr_str):
     emojis_count = 0.0
     for i in range(0, len(curr_str)):
         if (not curr_str[i] == " ") and (not curr_str[i].isalpha()) \
-                and (not curr_str[i] in [",", ".", ";", "!", "?", ":", "(", ")", "[", "]", "{", "}","-","+"]):
+                and (not curr_str[i] in [",", ".", ";", "!", "?", ":" , "(", ")", "[", "]", "{", "}","-","+"]):
             emojis_count += 1.0
     for i in range(0, len(curr_str)):
         if (not curr_str[i] == " ") and (not curr_str[i].isalpha()):
@@ -149,4 +149,4 @@ nn_classifier = NN_classifier(train_data, train_labels, validation_ids, np.array
 print("STARTED CLASSIFYING")
 nn_classifier.classify_tweets()
 
-# TODO: implement neural network classifier and use it
+# TODO: implement keras network with word embeddings
