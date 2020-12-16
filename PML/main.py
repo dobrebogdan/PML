@@ -104,9 +104,9 @@ for item in words_cnt.items():
     words_cnt_lst.append((item[1], item[0]))
 
 words_cnt_lst = sorted(words_cnt_lst, reverse=True)
-with open("freq_words.txt", "w") as f:
-    for pair in words_cnt_lst:
-        f.write("'" + str(nlp.tokenizer(pair[1])[0].lemma_) + "', ")
+#with open("freq_words.txt", "w") as f:
+#    for pair in words_cnt_lst:
+#        f.write("'" + str(nlp.tokenizer(pair[1])[0].lemma_) + "', ")
 
 
 #train.train_NN(train_data, train_labels)
