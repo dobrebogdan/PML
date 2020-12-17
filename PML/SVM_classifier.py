@@ -6,7 +6,7 @@ from sklearn import svm
 nlp = spacy.load('de_core_news_sm')
 stemmer = Cistem()
 
-mode = "dev"
+mode = "test"
 # dev or test
 
 class SVM_classifier:
@@ -21,10 +21,17 @@ class SVM_classifier:
 
     def classify_tweets(self):
         # write your code here
+
         clf = svm.SVC(kernel='rbf')
+        print("Before fitting")
+        print(self.train_data)
         clf.fit(self.train_data, self.train_labels)
+        print("After fitting")
         l = len(self.validation_data)
+        print("Before prediction")
+        print(self.validation_data)
         self.predictions = clf.predict(self.validation_data)
+        print("After prediction")
         with open("output.txt", "w+") as f:
             l = len(self.predictions)
 
@@ -33,6 +40,7 @@ class SVM_classifier:
                 f.write(", ")
                 f.write(self.predictions[i])
                 f.write("\n")
+        print("After file writing")
         self.predictions = self.predictions
         if mode == "dev":
             self.print_error()

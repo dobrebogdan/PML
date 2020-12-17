@@ -9,7 +9,7 @@ from nltk.corpus import stopwords
 import spacy
 import train
 
-mode = "dev"
+mode = "test"
 # dev or test
 
 # import nltk
@@ -20,10 +20,23 @@ german_stop_words = stopwords.words('german')
 
 nlp = spacy.load('de_core_news_sm')
 
-freq_words = ['isch', 'de', 'au', 'i', 'ja', 'e', 'en', 'no', 'uf', 'bi', 'nid', 'd', 'ha', 'het', 'scho', 'vo', 'ned', 's', 'z',
-              'oj', 'mer', 'nöd', 'bisch', 'han', 'hesch', 'mal', 'si', 'eifach', 'immer', 'u', 'gsi', 'dr', 'grad', 'a', 'mi', 'nei']
 
 
+freq_words = []
+l = 0
+with open("freq_words.txt") as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=",")
+    for row in csv_reader:
+        for col in row:
+            col = col.replace("'", "").replace(" ", "")
+
+            freq_words.append(col)
+            l+= 1
+            if l >= 400:
+                break
+# freq_words = ['isch', 'de', 'au', 'i', 'ja', 'e', 'en', 'no', 'uf', 'bi', 'nid', 'd', 'ha', 'het', 'scho', 'vo', 'ned', 's', 'z', 'oj', 'mer', 'nöd', 'bisch', 'han', 'hesch', 'mal', 'si', 'eifach', 'immer', 'u', 'gsi', 'dr']
+print(len(freq_words))
+print(freq_words)
 words_cnt = {}
 
 def text_to_coords(curr_str):
@@ -79,8 +92,8 @@ with open("training.txt") as csv_file:
         train_data.append(text_to_coords((row[3])))
         row[1] = float(row[1])
         row[2] = float(row[2])
-        train_labels.append(np.float(row[0]))
-        #train_labels.append(str(row[1]) + "," + str(row[2]))
+        #train_labels.append(np.float(row[0]))
+        train_labels.append(str(row[1]) + "," + str(row[2]))
 
 print("TRAIN DATA LENGTH IS " + str(len(train_data)))
 train_data = np.array(train_data)
