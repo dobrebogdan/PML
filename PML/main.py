@@ -25,7 +25,7 @@ with open("freq_words.txt") as csv_file:
 
             freq_words.append(col)
             l+= 1
-            if l >= 400:
+            if l >= 2000:
                 break
 print(len(freq_words))
 words_cnt = {}

@@ -17,10 +17,7 @@ mode = "test"
 
 german_stop_words = stopwords.words('german')
 
-
 nlp = spacy.load('de_core_news_sm')
-
-
 
 freq_words = []
 l = 0
