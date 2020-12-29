@@ -1,4 +1,4 @@
-#TODO: Debug new approach, maybe use NN, maybe fewer words
+#TODO: Debug new approach, maybe use NN, maybe fewer words, maybe doc2vec
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,6 +14,11 @@ import train
 mode = "test"
 # dev or test
 
+# ERROR: 1.17 with lemmatizer
+# 1.17 without lemmatizer...
+
+# ERROR is 0.92 with training word embeddings at 100 epochs
+# ERROR is 0.90 without window and negatives
 
 nlp = spacy.load('de_core_news_sm')
 
@@ -44,9 +49,11 @@ def text_to_tokens(curr_str):
             curr_str = curr_str.replace(curr_str[i], " ")
     curr_str = curr_str.lower()
     tokens = nlp.tokenizer(curr_str)
+    # tokens = word_tokenize(curr_str)
     good_tokens = []
     for token in tokens:
         #print(token, token.lemma_)
+
         token = str(token.lemma_)
         if token == "" or (not token[0].isalpha()):
             continue
@@ -82,15 +89,7 @@ def text_to_coords(model, curr_str):
 def add_tuples(a, b):
     return (a[0] + b[0], a[1] + b[1])
 
-def div_tuple(a, d):
-    return (a[0]/d, a[1]/d)
 
-def useful_data(coords):
-    for i in range(0, len(coords)):
-        if coords[i] > 0:
-            return True
-    return False
-# Press the green button in the gutter to run the script.
 train_text = []
 train_tokens = []
 train_labels = []
@@ -106,12 +105,40 @@ with open("training.txt") as csv_file:
         #train_labels.append(np.float(row[0]))
         train_labels.append(str(row[1]) + "," + str(row[2]))
 
-model = gensim.models.Word2Vec(train_tokens, size=300, min_count=1, workers=4)
+# SOME RESULTS
+
+# no window, no negative = 0.910
+# window  1, no negative = 0.934
+# window  5, no negative = 0.903
+# window 10, no negative = 0.903       go with this
+# window 20. no negative = 0.904
+# window 10, negative 10 = 0.905
+# window 10, negative 20 = 0.910
+# window 20, negative 10 = 0.903
+# window 20, negative 20 = 0.904
+
+# alpha = 0.01, min_alpha = 0.001 => 0.89
+# alpha = 0.01, min_alpha = 0.01 sample = 6e-5=> 0.88
+# alpha = 0.1, min_alpha = 0.1 sample = 6e-5 => 0.95
+# alpha = 0.01, min_alpha = 0.01, sample = 1e-3 => 0.89
+# alpha = 0.01, min_alpha = 0.01, sample = 1e-4 => 0.89
+# alpha = 0.01, min_alpha = 0.01 sample = 5e-5=> 0.88
+model = gensim.models.Word2Vec(min_count=20,
+                     window=10,
+                     size=200,
+                     sample=5e-5,
+                     alpha=0.01,
+                     min_alpha=0.01,
+                     # negative=20,
+                     workers=4)
+
+model.build_vocab(train_tokens, progress_per=10000)
+model.train(train_tokens, total_examples=model.corpus_count, epochs=100, report_delay=1)
+model.init_sims(replace=True)
 train_data = []
 for entry in train_text:
     train_data.append(text_to_coords(model, entry))
 print("Model created")
-
 
 
 validation_data = []
@@ -137,4 +164,3 @@ svm_classifier = SVM_classifier(train_data, train_labels, validation_ids, valida
 
 # C 1000 gamma 1, error 1.094
 svm_classifier.classify_tweets()
-
