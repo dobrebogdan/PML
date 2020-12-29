@@ -1,15 +1,9 @@
-#TODO: Debug new approach, maybe use NN, maybe fewer words, maybe doc2vec
-
-import matplotlib.pyplot as plt
-import numpy as np
 import csv
 from SVM_classifier import SVM_classifier
-from nltk.tokenize import word_tokenize
-from nltk.stem.snowball import GermanStemmer
-from german_lemmatizer import lemmatize
+
 import spacy
 import gensim
-import train
+
 
 mode = "test"
 # dev or test
